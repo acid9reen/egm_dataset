@@ -1,0 +1,8 @@
+# Changes here will be overwritten by Copier
+_commit: v1.4
+_src_path: gh:acid9reen/python_template
+author: Ruslan Smirnov
+package_name: egm_dataset
+project_name: EGM Dataset
+project_short_description: EGM dataset preprocessing tool
+python_version: '3.10'

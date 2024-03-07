@@ -1,0 +1,54 @@
+[build-system]
+# Minimum requirements for the build system to execute.
+requires = ["setuptools", "wheel"]  # PEP 508 specifications.
+
+[project]
+name = "egm_dataset"
+authors = [
+    {name = "Ruslan Smirnov"},
+]
+description = "EGM dataset preprocessing tool"
+readme = "README.md"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "scipy",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+]
+dev = [
+    "egm_dataset[test]",
+    "ruff",
+    "mypy",
+    "pre-commit",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.mypy]
+disallow_untyped_defs = true
+disallow_any_unimported = true
+no_implicit_optional = true
+check_untyped_defs = true
+warn_return_any = true
+warn_unused_ignores = true
+show_error_codes = true
+files = ["src/"]
+exclude = '''(?x)^(
+    .git/|
+    .venv/|
+    venv/|
+  )$'''
+
+[tool.ruff]
+src = ["src", "tests"]
+show-fixes=true
+output-format="full"
+
+[tool.ruff.lint]
+select = ["E", "F", "Q", "B"]
