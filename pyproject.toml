@@ -27,6 +27,9 @@ dev = [
     "pre-commit",
 ]
 
+[project.scripts]
+stage_1 = "egm_dataset.cli.stage_1:main"
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 
