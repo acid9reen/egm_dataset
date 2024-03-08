@@ -1,5 +1,6 @@
 import argparse
 import csv
+import typing as tp
 from itertools import repeat
 from pathlib import Path
 
@@ -47,28 +48,53 @@ def parse_args() -> Stage1Namespace:
     return parser.parse_args(namespace=Stage1Namespace())
 
 
+class Stage1Schema(tp.TypedDict):
+    signal: str
+    label: str
+    frequency_hz: int
+
+
 def main() -> int:
     args = parse_args()
 
     xs = sorted(
         map(
-            lambda p: p.resolve().relative_to(args.dataset_root),
+            lambda p: p.resolve().relative_to(args.dataset_root).as_posix(),
             args.dataset_root.rglob("*.npy"),
         ),
     )
 
     ys = sorted(
         map(
-            lambda p: p.resolve().relative_to(args.dataset_root),
+            lambda p: p.resolve().relative_to(args.dataset_root).as_posix(),
             args.dataset_root.rglob("*.json"),
         ),
     )
 
-    with open(args.dataset_root / args.output_filename, "w", newline="") as out:
-        csv_writer = csv.writer(out)
+    output_filepath = args.dataset_root / args.output_filename
+    fieldnames = sorted(list(Stage1Schema.__required_keys__))
 
-        csv_writer.writerow(["signal", "label", "frequency(hz)"])
-        csv_writer.writerows(zip(xs, ys, repeat(args.default_frequency)))
+    existing_xs: set[str] = set()
+    existing_ys: set[str] = set()
+    if file_already_exists := output_filepath.exists():
+        with open(output_filepath, "r") as in_:
+            csv_reader = csv.DictReader(in_, fieldnames=fieldnames)
+            _ = next(csv_reader)  # Skip header
+
+            row: Stage1Schema
+            for row in csv_reader:  # type: ignore
+                existing_xs.add(row["signal"])
+                existing_ys.add(row["label"])
+
+    with open(output_filepath, "a", newline="") as out:
+        csv_writer = csv.DictWriter(out, fieldnames=fieldnames)
+
+        _ = file_already_exists or csv_writer.writeheader()  # Used only for side effect, thus _
+        for x, y, frequency in zip(xs, ys, repeat(args.default_frequency)):
+            if x in existing_xs and y in existing_ys:
+                continue
+
+            csv_writer.writerow(Stage1Schema(signal=x, label=y, frequency_hz=frequency))
 
     return 0
 
