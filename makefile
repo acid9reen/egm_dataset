@@ -19,3 +19,4 @@ test:
 .PHONY: format
 format:
 	ruff format src
+	ruff check --select "I" --fix
