@@ -14,7 +14,8 @@ requires-python = ">=3.10"
 dependencies = [
     "numpy",
     "scipy",
-    "egmlib@git+https://github.com/acid9reen/egmlib"
+    "egmlib@git+https://github.com/acid9reen/egmlib",
+    "tqdm",
 ]
 
 [project.optional-dependencies]

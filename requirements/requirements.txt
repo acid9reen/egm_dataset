@@ -7,3 +7,4 @@ numpy==1.26.4
     #   scipy
 scipy==1.12.0
     # via egmlib
+tqdm==4.66.2

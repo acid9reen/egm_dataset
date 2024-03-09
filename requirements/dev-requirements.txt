@@ -35,6 +35,7 @@ scipy==1.12.0
     # via egmlib
 setuptools==69.1.1
     # via nodeenv
+tqdm==4.66.2
 typing-extensions==4.10.0
     # via mypy
 virtualenv==20.25.1
