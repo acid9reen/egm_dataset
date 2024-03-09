@@ -4,6 +4,7 @@ cfgv==3.4.0
     # via pre-commit
 distlib==0.3.8
     # via virtualenv
+egmlib @ git+https://github.com/acid9reen/egmlib@8ad5fac8a7cc5fac7eb8e5e17bb3cf74a638687f
 filelock==3.13.1
     # via virtualenv
 identify==2.5.35
@@ -16,7 +17,9 @@ mypy-extensions==1.0.0
 nodeenv==1.8.0
     # via pre-commit
 numpy==1.26.4
-    # via scipy
+    # via
+    #   egmlib
+    #   scipy
 packaging==23.2
     # via pytest
 platformdirs==4.2.0
@@ -29,6 +32,7 @@ pyyaml==6.0.1
     # via pre-commit
 ruff==0.3.1
 scipy==1.12.0
+    # via egmlib
 setuptools==69.1.1
     # via nodeenv
 typing-extensions==4.10.0
