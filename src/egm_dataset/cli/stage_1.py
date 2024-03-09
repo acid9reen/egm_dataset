@@ -54,6 +54,9 @@ class Stage1Schema(tp.TypedDict):
     frequency_hz: int
 
 
+STAGE1_FIELDNAMES = sorted(list(Stage1Schema.__required_keys__))
+
+
 def main() -> int:
     args = parse_args()
 
@@ -72,13 +75,12 @@ def main() -> int:
     )
 
     output_filepath = args.dataset_root / args.output_filename
-    fieldnames = sorted(list(Stage1Schema.__required_keys__))
 
     existing_xs: set[str] = set()
     existing_ys: set[str] = set()
     if file_already_exists := output_filepath.exists():
         with open(output_filepath, "r") as in_:
-            csv_reader = csv.DictReader(in_, fieldnames=fieldnames)
+            csv_reader = csv.DictReader(in_, fieldnames=STAGE1_FIELDNAMES)
             _ = next(csv_reader)  # Skip header
 
             row: Stage1Schema
@@ -87,7 +89,7 @@ def main() -> int:
                 existing_ys.add(row["label"])
 
     with open(output_filepath, "a", newline="") as out:
-        csv_writer = csv.DictWriter(out, fieldnames=fieldnames)
+        csv_writer = csv.DictWriter(out, fieldnames=STAGE1_FIELDNAMES)
 
         _ = file_already_exists or csv_writer.writeheader()  # Used only for side effect, thus _
         for x, y, frequency in zip(xs, ys, repeat(args.default_frequency)):
