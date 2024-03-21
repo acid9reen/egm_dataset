@@ -4,7 +4,7 @@ cfgv==3.4.0
     # via pre-commit
 distlib==0.3.8
     # via virtualenv
-egmlib @ git+https://github.com/acid9reen/egmlib@8ad5fac8a7cc5fac7eb8e5e17bb3cf74a638687f
+egmlib @ git+https://github.com/acid9reen/egmlib#main@bec443181ae1151718840b90ba65a07d407ac58a
 filelock==3.13.1
     # via virtualenv
 identify==2.5.35
