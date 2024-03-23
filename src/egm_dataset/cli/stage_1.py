@@ -60,19 +60,23 @@ STAGE1_FIELDNAMES = sorted(list(Stage1Schema.__required_keys__))
 def main() -> int:
     args = parse_args()
 
-    xs = sorted(
-        map(
-            lambda p: p.resolve().relative_to(args.dataset_root).as_posix(),
+    xs = {
+        path.stem: path.as_posix()
+        for path in map(
+            lambda p: p.resolve().relative_to(args.dataset_root),
             args.dataset_root.rglob("*.npy"),
-        ),
-    )
+        )
+    }
 
-    ys = sorted(
-        map(
-            lambda p: p.resolve().relative_to(args.dataset_root).as_posix(),
+    ys = {
+        path.stem: path.as_posix()
+        for path in map(
+            lambda p: p.resolve().relative_to(args.dataset_root),
             args.dataset_root.rglob("*.json"),
-        ),
-    )
+        )
+    }
+
+    exps = set(xs.keys()) & set(ys.keys())
 
     output_filepath = args.dataset_root / args.output_filename
 
@@ -92,7 +96,10 @@ def main() -> int:
         csv_writer = csv.DictWriter(out, fieldnames=STAGE1_FIELDNAMES)
 
         _ = file_already_exists or csv_writer.writeheader()  # Used only for side effect, thus _
-        for x, y, frequency in zip(xs, ys, repeat(args.default_frequency)):
+        for exp, frequency in zip(exps, repeat(args.default_frequency)):
+            x = xs[exp]
+            y = ys[exp]
+
             if x in existing_xs and y in existing_ys:
                 continue
 
