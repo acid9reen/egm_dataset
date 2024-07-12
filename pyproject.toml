@@ -14,6 +14,8 @@ requires-python = ">=3.10"
 dependencies = [
     "numpy",
     "scipy",
+    "egmlib@git+https://github.com/acid9reen/egmlib#main",
+    "tqdm",
 ]
 
 [project.optional-dependencies]
@@ -26,6 +28,9 @@ dev = [
     "mypy",
     "pre-commit",
 ]
+
+[project.scripts]
+stage_1 = "egm_dataset.cli.stage_1:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -49,6 +54,7 @@ exclude = '''(?x)^(
 src = ["src", "tests"]
 show-fixes=true
 output-format="full"
+line-length = 100
 
 [tool.ruff.lint]
-select = ["E", "F", "Q", "B"]
+select = ["E", "F", "Q", "B", "I"]
